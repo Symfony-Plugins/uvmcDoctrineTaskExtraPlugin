@@ -1,0 +1,13 @@
+## uvmcDoctrineTaskExtraPlugin adds new task in the doctrine namespace.
+
+  * __`doctrine:delete-files-for-model`__
+
+  This handy task will delete all the files related to a model. It will "take care" of Filters, Forms, Tables, Model   classes, even if the files are inside a plugin.
+
+  Use it like this:
+
+        php symfony doctrine:delete-files-for-model MyModel
+
+
+
+### If you have other task related to Doctrine, feel free to contribute! 
