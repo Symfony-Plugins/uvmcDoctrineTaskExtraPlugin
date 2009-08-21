@@ -44,6 +44,8 @@ EOF;
 
     
     $rootDir = sfConfig::get('sf_root_dir');
+    $derivatedNames = $this->generateDerivatedNames($modelName);
+    
     foreach($derivatedNames as $toEradicate)
     {
       $files = sfFinder::type('file')->name($toEradicate.'.class.php')->in($rootDir);
