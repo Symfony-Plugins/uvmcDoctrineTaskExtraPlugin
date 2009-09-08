@@ -31,7 +31,18 @@ EOF;
   {
     $modelName = $arguments['model_name'];
     // add your code here
-    $confirm = $this->askConfirmation(array(sprintf('This will delete all the files related to model %s', $modelName),
+    
+    $this->log("listing files... Don't worry, I won't delete without your permission.");
+    $files = array();
+    $rootDir = sfConfig::get('sf_root_dir');
+    $derivatedNames = $this->generateDerivatedNames($modelName);
+    foreach($derivatedNames as $toEradicate)
+    {
+      $files = array_merge($files, sfFinder::type('file')->name($toEradicate.'.class.php')->in($rootDir));
+    }
+    
+    $this->log($files);
+    $confirm = $this->askConfirmation(array(sprintf('This will delete all the files above', $modelName),
                                             sprintf('Are you sure you want to proceed (y/N)')),
                                       'QUESTION',
                                       false);
@@ -41,19 +52,11 @@ EOF;
       $this->log('Operation aborted.', 'INFO');
       return 1;
     }
-
     
-    $rootDir = sfConfig::get('sf_root_dir');
-    $derivatedNames = $this->generateDerivatedNames($modelName);
-    
-    foreach($derivatedNames as $toEradicate)
+    foreach($files as $file)
     {
-      $files = sfFinder::type('file')->name($toEradicate.'.class.php')->in($rootDir);
-      foreach($files as $file)
-      {
-        unlink($file);
-        $this->logSection('file-', $file);
-      }
+      unlink($file);
+      $this->logSection('file-', $file);
     }
   }
 
